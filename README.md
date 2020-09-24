@@ -1,5 +1,5 @@
 # Simple Cpp Csv Writer
-* simple header only stringstream based csv writer
+* simple header only c++11 csv writer
 
 * writer -> setHeader is Optional
 
