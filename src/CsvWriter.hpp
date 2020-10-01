@@ -45,18 +45,23 @@ class Record {
 class CsvWriter {
  private:
   std::fstream file;
+  std::string filePath;
 
   Record header;
   std::vector<Record> records;
 
  public:
-  CsvWriter(const std::string& filePath) { file.open(filePath, std::ios::out); }
+  CsvWriter(const std::string& filePath) : filePath(filePath) {
+    file.open(filePath, std::ios::out);
+  }
 
   ~CsvWriter() { close(); }
 
   void setHeader(const Record& header) { this->header = header; }
 
   void insertRecord(const Record& record) { records.push_back(record); }
+
+  bool isOpen() { return file.is_open(); }
 
   void write() {
     if (!header.empty()) {
@@ -66,6 +71,13 @@ class CsvWriter {
     for (auto& record : records) {
       file << record.toString() << std::endl;
     }
+  }
+
+  void write(Record& record) {
+    if (isOpen()) {
+      file.open(filePath, std::ios::out | std::ios::app);
+    }
+    file << record.toString() << std::endl;
   }
 
   void close() {
